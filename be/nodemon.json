@@ -1,0 +1,6 @@
+{
+  "verbose": true,
+  "watch": ["./src"],
+  "ext": "ts,tsx",
+  "exec": "PORT=8080 bun ./src/index.ts --host 0.0.0.0"
+}
