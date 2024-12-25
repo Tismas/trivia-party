@@ -5,4 +5,7 @@ export interface ServerGameEventHandlers {
   "choose-answer": (answer: string) => void;
 }
 
-export const handleGameEvents = (socket: TypedServerSocket) => {};
+export const handleGameEvents = (socket: TypedServerSocket) => {
+  socket.on("vote-category", () => {});
+  socket.on("choose-answer", () => {});
+};

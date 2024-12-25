@@ -7,4 +7,9 @@ export interface ServerRoomEventHandlers {
   "start-game": () => void;
 }
 
-export const handleRoomEvents = (socket: TypedServerSocket) => {};
+export const handleRoomEvents = (socket: TypedServerSocket) => {
+  socket.on("create-room", () => {});
+  socket.on("join-room", () => {});
+  socket.on("leave-room", () => {});
+  socket.on("start-game", () => {});
+};
