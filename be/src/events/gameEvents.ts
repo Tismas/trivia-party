@@ -1,8 +1,8 @@
-import { TypedServerSocket } from "./socket";
+import type { TypedServerSocket } from "./socket";
 
 export interface ServerGameEventHandlers {
-  "vote-category": () => void;
-  "choose-answer": () => void;
+  "vote-category": (categoryId: string) => void;
+  "choose-answer": (answer: string) => void;
 }
 
 export const handleGameEvents = (socket: TypedServerSocket) => {};

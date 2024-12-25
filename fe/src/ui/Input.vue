@@ -6,7 +6,7 @@ const value = defineModel({ required: true });
   <input v-model="value" />
 </template>
 
-<style>
+<style scoped>
 input {
   background: transparent;
   border: 1px solid var(--fg);

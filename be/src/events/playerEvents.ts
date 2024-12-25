@@ -1,7 +1,7 @@
-import { TypedServerSocket } from "./socket";
+import type { TypedServerSocket } from "./socket";
 
 export interface ServerPlayerEventHandlers {
-  "set-name": () => void;
+  "set-name": (name: string) => void;
 }
 
 export const handlePlayerEvents = (socket: TypedServerSocket) => {};

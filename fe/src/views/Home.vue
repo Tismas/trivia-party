@@ -3,12 +3,18 @@ import { ref } from "vue";
 import Button from "../ui/Button.vue";
 import Input from "../ui/Input.vue";
 import { router } from "../router";
+import { socket } from "../io";
 
 const name = ref(localStorage.getItem("name") || "");
 
+// TODO handle reconnecting to existing game
+
 const handleContinue = () => {
   if (name.value) {
+    socket.emit("set-name", name.value);
     localStorage.setItem("name", name.value);
+
+    // TODO move to event handler
     router.push("/menu");
   }
 };
@@ -16,14 +22,14 @@ const handleContinue = () => {
 
 <template>
   <div class="wrapper">
-    <Input v-model="name" />
+    <Input placeholder="Your name" v-model="name" />
     <Button :disabled="name.length === 0" @click="handleContinue"
       >Continue</Button
     >
   </div>
 </template>
 
-<style>
+<style scoped>
 .wrapper {
   display: flex;
   flex-direction: column;

@@ -4,4 +4,4 @@
   <div>Lobby</div>
 </template>
 
-<style></style>
+<style scoped></style>
