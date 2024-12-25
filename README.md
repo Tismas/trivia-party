@@ -1,5 +1,7 @@
 # Trivia party
 
+[Play here](https://tismas.github.io/trivia-party)
+
 ### Plan
 
 Events:
