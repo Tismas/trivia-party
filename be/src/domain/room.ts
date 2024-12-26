@@ -58,7 +58,7 @@ export const leaveRoom = (player: Player): Room | undefined => {
   return room;
 };
 
-const findRoom = (roomId: string) => {
+export const findRoom = (roomId: string) => {
   return rooms.find((room) => room.id === roomId);
 };
 

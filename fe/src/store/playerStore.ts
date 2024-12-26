@@ -4,10 +4,23 @@ import { socket } from "../io";
 import type { Room } from "../events/roomEvents";
 import type { Player } from "../events/playerEvents";
 
+interface VoteOption {
+  id: number;
+  name: string;
+}
+
+interface Vote {
+  question: string;
+  endsAt: Date;
+  options: VoteOption[];
+}
+
 export const usePlayerStore = defineStore("player", () => {
   const name = ref("");
   const joiningRoom = ref(false);
   const settingName = ref(false);
+  const gameLoading = ref(false);
+  const currentVote = ref<Vote | null>(null);
   const currentRoom = ref<Room | null>(null);
 
   const setName = (newName: string) => {
@@ -50,10 +63,34 @@ export const usePlayerStore = defineStore("player", () => {
     currentRoom.value = room;
   };
 
+  const reset = () => {
+    currentRoom.value = null;
+    joiningRoom.value = false;
+    settingName.value = false;
+  };
+
+  const setGameLoading = () => {
+    gameLoading.value = true;
+  };
+
+  const startCategoryVote = (endsAt: Date, categories: VoteOption[]) => {
+    gameLoading.value = false;
+    currentVote.value = {
+      question: "Which category?",
+      endsAt,
+      options: categories,
+    };
+  };
+
+  const finishVote = () => {
+    currentVote.value = null;
+  };
+
   return {
     name,
     setName,
     settingName,
+    reset,
 
     currentRoom,
     setRoom,
@@ -63,5 +100,11 @@ export const usePlayerStore = defineStore("player", () => {
     addPlayerToCurrentRoom,
     removePlayerFromCurrentRoom,
     roomNotFound,
+
+    setGameLoading,
+    startCategoryVote,
+    finishVote,
+    gameLoading,
+    currentVote,
   };
 });

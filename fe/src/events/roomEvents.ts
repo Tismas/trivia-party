@@ -33,4 +33,10 @@ export const handleRoomEvents = (socket: TypedSocket) => {
   socket.on("game-started", () => {
     router.push("/game");
   });
+
+  socket.on("invalid-game", () => {
+    router.push("/menu");
+    const playerStore = usePlayerStore();
+    playerStore.reset();
+  });
 };

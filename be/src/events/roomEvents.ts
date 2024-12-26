@@ -1,6 +1,7 @@
 import { createRoom, joinRoom, leaveRoom, type Room } from "../domain/room";
 import type { TypedServerSocket } from "./socket";
 import { io } from "../index";
+import { startGame } from "../domain/game";
 
 export const handleRoomEvents = (socket: TypedServerSocket) => {
   socket.on("create-room", () => {
@@ -35,6 +36,13 @@ export const handleRoomEvents = (socket: TypedServerSocket) => {
     if (!socket.data.player.currentRoom) return;
 
     io.to(socket.data.player.currentRoom).emit("game-started");
+
+    const game = startGame(socket.data.player.currentRoom);
+    if (!game) {
+      io.to(socket.data.player.currentRoom).emit("invalid-game");
+      return;
+    }
+    game.startCategoryVote(io.to(socket.data.player.currentRoom));
   });
 };
 

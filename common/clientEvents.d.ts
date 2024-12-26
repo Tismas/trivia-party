@@ -1,3 +1,5 @@
+import { CategoryDto } from "../be/src/domain/game";
+
 export type ClientRoomEventHandlers = {
   "room-joined": (room: Room) => void;
   "room-not-found": () => void;
@@ -5,6 +7,7 @@ export type ClientRoomEventHandlers = {
   "player-left": (player: Player) => void;
   "room-left": (roomId: string, playerId: string) => void;
   "game-started": () => void;
+  "invalid-game": () => void;
 };
 
 export type ClientPlayerEventHandlers = {
@@ -12,8 +15,12 @@ export type ClientPlayerEventHandlers = {
 };
 
 export type ClientGameEventHandlers = {
-  "category-voted": () => void;
-  "question-answered": () => void;
+  "loading-categories": () => void;
+  "category-vote-started": (endsAt: string, categories: CategoryDto[]) => void;
+  "category-vote-finished": () => void;
+  "loading-questions": () => void;
+  "question-vote-started": () => void;
+  "question-vote-finished": () => void;
 };
 
 export type ClientEventHandlers = ClientGameEventHandlers &

@@ -1,4 +1,4 @@
-import { Socket } from "socket.io";
+import { BroadcastOperator, Socket } from "socket.io";
 
 import { ClientToServerEvents, ServerToClientEvents } from "../../../common/io";
 import { Player } from "../domain/player";
@@ -13,5 +13,10 @@ export type TypedServerSocket = Socket<
   ClientToServerEvents,
   ServerToClientEvents,
   InterServerEvents,
+  SocketData
+>;
+
+export type TypedRoomSocket = BroadcastOperator<
+  ServerToClientEvents,
   SocketData
 >;
