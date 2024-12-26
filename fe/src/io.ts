@@ -9,5 +9,5 @@ const url = new URL(config.backendUrl);
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
   url.origin,
-  { path: url.pathname, transports: ["websocket"] }
+  { path: url.pathname + "/socket.io", transports: ["websocket"] }
 );
