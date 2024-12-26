@@ -2,6 +2,7 @@ import express from "express";
 import http from "http";
 import { Server } from "socket.io";
 import morgan from "morgan";
+import cors from "cors";
 
 import { handleGameEvents } from "./events/gameEvents";
 import { handlePlayerEvents } from "./events/playerEvents";
@@ -11,8 +12,11 @@ import { InterServerEvents, SocketData } from "./events/socket";
 import { ClientToServerEvents, ServerToClientEvents } from "../../common/io";
 
 const app = express();
-app.use(morgan("[:date[web]] :method :url :status"));
 const server = http.createServer(app);
+const allowedOrigins = ["http://localhost:5173", "https://tismas.github.io"];
+
+app.use(cors({ origin: allowedOrigins }));
+app.use(morgan("[:date[web]] :method :url :status"));
 
 export const io = new Server<
   ClientToServerEvents,
@@ -21,7 +25,7 @@ export const io = new Server<
   SocketData
 >(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: allowedOrigins,
   },
 });
 
