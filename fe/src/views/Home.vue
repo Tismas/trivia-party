@@ -22,7 +22,7 @@ const handleContinue = () => {
 
 <template>
   <div class="wrapper">
-    <Input placeholder="Your name" v-model="name" />
+    <Input placeholder="Your name..." v-model="name" />
     <Button :disabled="name.length === 0" @click="handleContinue"
       >Continue</Button
     >

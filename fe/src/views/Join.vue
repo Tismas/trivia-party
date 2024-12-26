@@ -17,7 +17,7 @@ const handleJoin = () => {
 
 <template>
   <div class="wrapper">
-    <Input placeholder="room-id" v-model="name" />
+    <Input placeholder="ROOM-CODE..." v-model="name" />
     <Button :disabled="name.length === 0" @click="handleJoin">Join</Button>
   </div>
 </template>
