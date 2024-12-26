@@ -26,6 +26,7 @@ jobs:
         with:
           cache: "pnpm"
           cache-dependency-path: ./fe/pnpm-lock.yaml
+          node-version-file: ".nvmrc"
 
       - name: Install dependencies
         run: pnpm i

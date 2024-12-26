@@ -8,13 +8,6 @@ export interface Room {
   players: Player[];
 }
 
-export interface ClientRoomEventHandlers {
-  "room-joined": (room: Room) => void;
-  "room-not-found": () => void;
-  "room-left": (roomId: string, playerId: string) => void;
-  "game-started": () => void;
-}
-
 export const handleRoomEvents = (socket: TypedSocket) => {
   socket.on("room-joined", (room) => {
     router.push("/game");

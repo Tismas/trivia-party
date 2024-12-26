@@ -6,10 +6,6 @@ export interface Player {
   name: string;
 }
 
-export interface ClientPlayerEventHandlers {
-  "name-changed": (name: string) => void;
-}
-
 export const handlePlayerEvents = (socket: TypedSocket) => {
   socket.on("name-changed", () => {
     router.push("/menu");

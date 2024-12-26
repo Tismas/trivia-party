@@ -2,13 +2,6 @@ import { createRoom, joinRoom, leaveRoom, type Room } from "../domain/room";
 import type { TypedServerSocket } from "./socket";
 import { io } from "../index";
 
-export interface ServerRoomEventHandlers {
-  "create-room": () => void;
-  "join-room": (roomId: string) => void;
-  "leave-room": () => void;
-  "start-game": () => void;
-}
-
 export const handleRoomEvents = (socket: TypedServerSocket) => {
   socket.on("create-room", () => {
     const room = createRoom();

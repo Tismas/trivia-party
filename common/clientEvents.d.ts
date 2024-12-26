@@ -1,6 +1,18 @@
-import type { ClientGameEventHandlers } from "../fe/src/events/gameEvents";
-import type { ClientPlayerEventHandlers } from "../fe/src/events/playerEvents";
-import type { ClientRoomEventHandlers } from "../fe/src/events/roomEvents";
+export type ClientRoomEventHandlers = {
+  "room-joined": (room: Room) => void;
+  "room-not-found": () => void;
+  "room-left": (roomId: string, playerId: string) => void;
+  "game-started": () => void;
+};
+
+export type ClientPlayerEventHandlers = {
+  "name-changed": (name: string) => void;
+};
+
+export type ClientGameEventHandlers = {
+  "category-voted": () => void;
+  "question-answered": () => void;
+};
 
 export type ClientEventHandlers = ClientGameEventHandlers &
   ClientPlayerEventHandlers &
