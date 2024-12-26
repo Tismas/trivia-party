@@ -8,6 +8,6 @@ import { config } from "./config";
 const url = new URL(config.backendUrl);
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
-  url.host,
-  { path: url.pathname }
+  url.origin,
+  { path: url.pathname, transports: ["websocket"] }
 );
