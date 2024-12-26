@@ -10,7 +10,6 @@ import { InterServerEvents, SocketData } from "./events/socket";
 import { ClientToServerEvents, ServerToClientEvents } from "../../common/io";
 
 const app = express();
-app.use(express.static("./dist"));
 const server = http.createServer(app);
 
 export const io = new Server<
@@ -31,6 +30,10 @@ io.on("connection", (socket) => {
 });
 
 io.on("disconnect", () => {});
+
+app.get("/", (_, res) => {
+  res.send("Trivia party - Ok!");
+});
 
 const port = process.env.PORT || 8080;
 server.listen(port, () => {
