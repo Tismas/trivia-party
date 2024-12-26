@@ -40,7 +40,10 @@ io.on("connection", (socket) => {
 io.on("disconnect", () => {});
 
 app.get("/", (_, res) => {
-  res.send("Trivia party - Ok!");
+  res.status(200).send("Trivia party - Ok!");
+});
+app.get("/status", (_, res) => {
+  res.status(200).send("ok");
 });
 
 const port = process.env.PORT || 8080;
