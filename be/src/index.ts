@@ -6,7 +6,7 @@ import cors from "cors";
 
 import { handleGameEvents } from "./events/gameEvents";
 import { handlePlayerEvents } from "./events/playerEvents";
-import { handleRoomEvents } from "./events/roomEvents";
+import { handleRoomEvents, leaveSocketRoom } from "./events/roomEvents";
 import type { InterServerEvents, SocketData } from "./events/socket";
 import { config } from "./config";
 
@@ -46,7 +46,11 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     if (socket.data.player.currentRoom) {
-      leaveRoom(socket.data.player);
+      const leftRoom = leaveRoom(socket.data.player);
+
+      if (leftRoom) {
+        leaveSocketRoom(socket, leftRoom);
+      }
     }
   });
 });

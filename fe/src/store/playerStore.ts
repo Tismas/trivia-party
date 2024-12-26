@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { socket } from "../io";
 import type { Room } from "../events/roomEvents";
+import type { Player } from "../events/playerEvents";
 
 export const usePlayerStore = defineStore("player", () => {
   const name = ref("");
@@ -30,6 +31,16 @@ export const usePlayerStore = defineStore("player", () => {
     joiningRoom.value = true;
   };
 
+  const removePlayerFromCurrentRoom = (player: Player) => {
+    if (!currentRoom.value) return;
+    currentRoom.value.players.splice(currentRoom.value.players.indexOf(player));
+  };
+
+  const addPlayerToCurrentRoom = (player: Player) => {
+    if (!currentRoom.value) return;
+    currentRoom.value.players.push(player);
+  };
+
   const roomNotFound = () => {
     joiningRoom.value = false;
     currentRoom.value = null;
@@ -49,6 +60,8 @@ export const usePlayerStore = defineStore("player", () => {
     createRoom,
     joinRoom,
     joiningRoom,
+    addPlayerToCurrentRoom,
+    removePlayerFromCurrentRoom,
     roomNotFound,
   };
 });

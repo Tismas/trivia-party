@@ -19,4 +19,14 @@ export const handleRoomEvents = (socket: TypedSocket) => {
     const playerStore = usePlayerStore();
     playerStore.roomNotFound();
   });
+
+  socket.on("player-joined", (player: Player) => {
+    const playerStore = usePlayerStore();
+    playerStore.addPlayerToCurrentRoom(player);
+  });
+
+  socket.on("player-left", (player: Player) => {
+    const playerStore = usePlayerStore();
+    playerStore.removePlayerFromCurrentRoom(player);
+  });
 };

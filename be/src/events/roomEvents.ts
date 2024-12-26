@@ -16,6 +16,7 @@ export const handleRoomEvents = (socket: TypedServerSocket) => {
     const joinedRoom = joinRoom(roomId, socket.data.player);
 
     if (joinedRoom) {
+      io.to(joinedRoom.id).emit("player-joined", socket.data.player.toDto());
       joinSocketRoom(socket, joinedRoom);
     } else {
       socket.emit("room-not-found");
@@ -26,8 +27,7 @@ export const handleRoomEvents = (socket: TypedServerSocket) => {
     const leftRoom = leaveRoom(socket.data.player);
 
     if (leftRoom) {
-      socket.leave(leftRoom.id);
-      socket.emit("room-left", leftRoom.id, socket.data.player.id);
+      leaveSocketRoom(socket, leftRoom);
     }
   });
 
@@ -41,4 +41,10 @@ export const handleRoomEvents = (socket: TypedServerSocket) => {
 const joinSocketRoom = (socket: TypedServerSocket, room: Room) => {
   socket.join(room.id);
   socket.emit("room-joined", room.toDto());
+};
+
+export const leaveSocketRoom = (socket: TypedServerSocket, room: Room) => {
+  socket.leave(room.id);
+  socket.emit("room-left", room.id, socket.data.player.id);
+  io.to(room.id).emit("player-left", socket.data.player.toDto());
 };
