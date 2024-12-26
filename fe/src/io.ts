@@ -5,6 +5,9 @@ import type {
 } from "../../common/io";
 import { config } from "./config";
 
+const url = new URL(config.backendUrl);
+
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
-  config.backendUrl
+  url.host,
+  { path: url.pathname }
 );
