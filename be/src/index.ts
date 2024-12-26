@@ -8,6 +8,7 @@ import { handleGameEvents } from "./events/gameEvents";
 import { handlePlayerEvents } from "./events/playerEvents";
 import { handleRoomEvents } from "./events/roomEvents";
 import { InterServerEvents, SocketData } from "./events/socket";
+import { config } from "./config";
 
 import { ClientToServerEvents, ServerToClientEvents } from "../../common/io";
 
@@ -27,6 +28,7 @@ export const io = new Server<
   cors: {
     origin: allowedOrigins,
   },
+  path: config.socketPath,
 });
 
 io.on("connection", (socket) => {
