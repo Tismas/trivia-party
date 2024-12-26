@@ -59,7 +59,7 @@ export const leaveRoom = (player: Player): Room | undefined => {
 };
 
 export const findRoom = (roomId: string) => {
-  return rooms.find((room) => room.id === roomId);
+  return rooms.find((room) => room.id.toLowerCase() === roomId.toLowerCase());
 };
 
 const generateRoomId = () => {

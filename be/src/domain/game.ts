@@ -1,5 +1,5 @@
 import { getCategoriesPool } from "../api/categories";
-import { TypedRoomSocket } from "../events/socket";
+import type { TypedRoomSocket } from "../events/socket";
 import { findRoom, Room } from "./room";
 import { pick } from "../../../common/utils/array";
 import { addSeconds } from "date-fns";
