@@ -1,10 +1,12 @@
 import { Socket } from "socket.io";
 
 import { ClientToServerEvents, ServerToClientEvents } from "../../../common/io";
+import { Player } from "../domain/player";
 
 export type InterServerEvents = Record<string, never>;
+
 export type SocketData = {
-  player: {};
+  player: Player;
 };
 
 export type TypedServerSocket = Socket<

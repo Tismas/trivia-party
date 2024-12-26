@@ -7,10 +7,15 @@ import cors from "cors";
 import { handleGameEvents } from "./events/gameEvents";
 import { handlePlayerEvents } from "./events/playerEvents";
 import { handleRoomEvents } from "./events/roomEvents";
-import { InterServerEvents, SocketData } from "./events/socket";
+import type { InterServerEvents, SocketData } from "./events/socket";
 import { config } from "./config";
 
-import { ClientToServerEvents, ServerToClientEvents } from "../../common/io";
+import type {
+  ClientToServerEvents,
+  ServerToClientEvents,
+} from "../../common/io";
+import { addPlayer, Player } from "./domain/player";
+import { leaveRoom } from "./domain/room";
 
 const app = express();
 const server = http.createServer(app);
@@ -32,16 +37,23 @@ export const io = new Server<
 });
 
 io.on("connection", (socket) => {
+  socket.data = { player: new Player() };
+  addPlayer(socket.data.player);
+
   handleGameEvents(socket);
   handlePlayerEvents(socket);
   handleRoomEvents(socket);
+
+  socket.on("disconnect", () => {
+    if (socket.data.player.currentRoom) {
+      leaveRoom(socket.data.player);
+    }
+  });
 });
 
 io.engine.on("connect_error", (err) => {
   console.log(err);
 });
-
-io.on("disconnect", () => {});
 
 app.get("/", (_, res) => {
   res.status(200).send("Trivia party - Ok!");
