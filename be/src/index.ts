@@ -37,6 +37,10 @@ io.on("connection", (socket) => {
   handleRoomEvents(socket);
 });
 
+io.engine.on("connect_error", (err) => {
+  console.log(err);
+});
+
 io.on("disconnect", () => {});
 
 app.get("/", (_, res) => {
