@@ -23,6 +23,7 @@ button {
   border: none;
   border-radius: 8px;
   position: relative;
+  color: var(--fg);
 }
 button:hover {
   background: var(--primary-lighter);

@@ -10,7 +10,7 @@ export interface Room {
 
 export const handleRoomEvents = (socket: TypedSocket) => {
   socket.on("room-joined", (room) => {
-    router.push("/game");
+    router.push("/lobby");
     const player = usePlayerStore();
     player.setRoom(room);
   });
@@ -28,5 +28,9 @@ export const handleRoomEvents = (socket: TypedSocket) => {
   socket.on("player-left", (player: Player) => {
     const playerStore = usePlayerStore();
     playerStore.removePlayerFromCurrentRoom(player);
+  });
+
+  socket.on("game-started", () => {
+    router.push("/game");
   });
 };

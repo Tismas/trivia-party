@@ -33,7 +33,6 @@ body {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
-  color: var(--fg);
   font-size: 1rem;
   transition-duration: 0.2s;
 }

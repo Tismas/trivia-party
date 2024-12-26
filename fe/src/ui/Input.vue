@@ -13,6 +13,7 @@ input {
   border-radius: 8px;
   padding: 8px 16px;
   outline: none;
+  color: var(--fg);
 }
 input:focus {
   border-color: var(--primary);
