@@ -1,4 +1,7 @@
-import { CategoryDto } from "../be/src/domain/game";
+export interface CategoryDto {
+  id: number;
+  name: string;
+}
 
 export type ClientRoomEventHandlers = {
   "room-joined": (room: Room) => void;
