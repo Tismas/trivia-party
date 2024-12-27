@@ -1,18 +1,9 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import { usePlayerStore } from "../store/playerStore";
 import Spinner from "../ui/Spinner.vue";
-import { socket } from "../io";
 import Timer from "../ui/Timer.vue";
 
 const playerStore = usePlayerStore();
-const chosen = ref<number | null>(null);
-
-const chooseAnswer = (choice: number) => {
-  if (chosen.value) return;
-  chosen.value = choice;
-  socket.emit("vote-category", chosen.value);
-};
 </script>
 
 <template>
@@ -23,35 +14,34 @@ const chooseAnswer = (choice: number) => {
     <span class="timer" v-if="!playerStore.currentVote.answers">
       <Timer :until="playerStore.currentVote.endsAt" />
     </span>
-    <span class="question">
-      {{ playerStore.currentVote.question }}
-    </span>
-    <ul class="answers" :class="{ chosen: !!chosen }">
+    <span class="question" v-html="playerStore.currentVote.question" />
+    <ul class="answers" :class="{ chosen: !!playerStore.chosenAnswer }">
       <li
         class="answer"
         :class="{
-          chosen: chosen === option.id,
+          chosen: playerStore.chosenAnswer === option.id,
           winner: playerStore.currentVote.answers?.winner === option.id,
           looser:
             playerStore.currentVote.answers &&
             playerStore.currentVote.answers.winner !== option.id,
         }"
         v-for="option in playerStore.currentVote.options"
-        @click="chooseAnswer(option.id)"
+        @click="playerStore.chooseAnswer(option.id)"
       >
         {{ option.name }}
 
         <div class="votes" v-if="playerStore.currentVote.answers">
           <div
-            class="vote"
             v-for="[playerId, time] in Object.entries(
               playerStore.currentVote.answers.votes[option.id] || {}
             )"
           >
-            <span class="vote-time">{{ time.toFixed(1) }}s</span>
-            <span class="vote-player-name">
-              {{ playerStore.getPlayerById(playerId)?.name }}
-            </span>
+            <div class="vote" v-if="playerStore.getPlayerById(playerId)">
+              <span class="vote-time">{{ time.toFixed(1) }}s</span>
+              <span class="vote-player-name">
+                {{ playerStore.getPlayerById(playerId)?.name }}
+              </span>
+            </div>
           </div>
         </div>
       </li>
@@ -69,6 +59,7 @@ const chooseAnswer = (choice: number) => {
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 64px;
+  text-align: center;
 }
 .answers {
   font-size: 1.2rem;
@@ -95,6 +86,7 @@ const chooseAnswer = (choice: number) => {
 }
 .votes {
   display: flex;
+  justify-content: space-around;
   gap: 16px;
   margin-top: 4px;
 }

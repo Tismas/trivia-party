@@ -8,10 +8,28 @@ export const handleGameEvents = (socket: TypedSocket) => {
   });
   socket.on("category-vote-started", (endsAt, categories) => {
     const playerStore = usePlayerStore();
-    playerStore.startCategoryVote(new Date(endsAt), categories);
+    playerStore.startVote(
+      new Date(endsAt),
+      "category",
+      "Which category?",
+      categories
+    );
   });
   socket.on("category-vote-finished", (votes, winner) => {
     const playerStore = usePlayerStore();
     playerStore.finishVote(votes, winner);
+  });
+
+  socket.on("loading-questions", () => {
+    const playerStore = usePlayerStore();
+    playerStore.setGameLoading();
+  });
+  socket.on("question-vote-started", (endsAt, question, answers) => {
+    const playerStore = usePlayerStore();
+    playerStore.startVote(new Date(endsAt), "question", question, answers);
+  });
+  socket.on("question-vote-finished", (votes, correctAnswer) => {
+    const playerStore = usePlayerStore();
+    playerStore.finishVote(votes, correctAnswer);
   });
 };

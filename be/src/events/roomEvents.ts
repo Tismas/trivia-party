@@ -37,12 +37,15 @@ export const handleRoomEvents = (socket: TypedServerSocket) => {
 
     io.to(socket.data.player.currentRoom).emit("game-started");
 
-    const game = startGame(socket.data.player.currentRoom);
+    const game = startGame(
+      socket.data.player.currentRoom,
+      io.to(socket.data.player.currentRoom)
+    );
     if (!game) {
       io.to(socket.data.player.currentRoom).emit("invalid-game");
       return;
     }
-    game.startCategoryVote(io.to(socket.data.player.currentRoom));
+    game.startCategoryVote();
   });
 };
 

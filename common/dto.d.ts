@@ -4,7 +4,7 @@ export interface Player {
   name: string;
 }
 
-export interface CategoryDto {
+export interface AnswerDto {
   id: number;
   name: string;
 }

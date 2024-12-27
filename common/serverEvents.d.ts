@@ -1,6 +1,6 @@
 export type ServerGameEventHandlers = {
   "vote-category": (categoryId: number) => void;
-  "choose-answer": (answerId: number) => void;
+  "choose-answer": (answer: number) => void;
 };
 
 export type ServerPlayerEventHandlers = {

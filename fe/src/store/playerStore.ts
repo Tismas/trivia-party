@@ -1,12 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { socket } from "../io";
-import type { Player, Room, Votes } from "../../../common/dto";
-
-interface VoteOption {
-  id: number;
-  name: string;
-}
+import type { AnswerDto, Player, Room, Votes } from "../../../common/dto";
 
 interface VoteAnswers {
   votes: Votes;
@@ -14,9 +9,10 @@ interface VoteAnswers {
 }
 
 interface Vote {
+  type: "question" | "category";
   question: string;
   endsAt: Date;
-  options: VoteOption[];
+  options: AnswerDto[];
   answers: VoteAnswers | null;
 }
 
@@ -27,6 +23,7 @@ export const usePlayerStore = defineStore("player", () => {
   const gameLoading = ref(false);
   const currentVote = ref<Vote | null>(null);
   const currentRoom = ref<Room | null>(null);
+  const chosenAnswer = ref<number | null>(null);
 
   const setName = (newName: string) => {
     if (!newName) return;
@@ -78,14 +75,33 @@ export const usePlayerStore = defineStore("player", () => {
     gameLoading.value = true;
   };
 
-  const startCategoryVote = (endsAt: Date, categories: VoteOption[]) => {
+  const startVote = (
+    endsAt: Date,
+    type: Vote["type"],
+    question: string,
+    answers: AnswerDto[]
+  ) => {
     gameLoading.value = false;
+    chosenAnswer.value = null;
+
     currentVote.value = {
-      question: "Which category?",
+      type,
+      question,
       endsAt,
-      options: categories,
+      options: answers,
       answers: null,
     };
+  };
+
+  const chooseAnswer = (choice: number) => {
+    if (chosenAnswer.value || !currentVote.value) return;
+    chosenAnswer.value = choice;
+
+    if (currentVote.value.type === "category") {
+      socket.emit("vote-category", chosenAnswer.value);
+    } else {
+      socket.emit("choose-answer", chosenAnswer.value);
+    }
   };
 
   const finishVote = (votes: Votes, winner: number) => {
@@ -114,8 +130,10 @@ export const usePlayerStore = defineStore("player", () => {
     roomNotFound,
     getPlayerById,
 
+    chosenAnswer,
+    chooseAnswer,
     setGameLoading,
-    startCategoryVote,
+    startVote,
     finishVote,
     gameLoading,
     currentVote,
