@@ -1,4 +1,4 @@
-import { CategoryDto } from "../../../common/clientEvents";
+import { CategoryDto } from "../../../common/dto";
 
 interface CategoriesDto {
   trivia_categories: CategoryDto[];

@@ -10,8 +10,8 @@ export const handleGameEvents = (socket: TypedSocket) => {
     const playerStore = usePlayerStore();
     playerStore.startCategoryVote(new Date(endsAt), categories);
   });
-  socket.on("category-vote-finished", () => {
+  socket.on("category-vote-finished", (votes, winner) => {
     const playerStore = usePlayerStore();
-    playerStore.finishVote();
+    playerStore.finishVote(votes, winner);
   });
 };

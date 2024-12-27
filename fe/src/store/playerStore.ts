@@ -1,18 +1,23 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { socket } from "../io";
-import type { Room } from "../events/roomEvents";
-import type { Player } from "../events/playerEvents";
+import type { Player, Room, Votes } from "../../../common/dto";
 
 interface VoteOption {
   id: number;
   name: string;
 }
 
+interface VoteAnswers {
+  votes: Votes;
+  winner: number;
+}
+
 interface Vote {
   question: string;
   endsAt: Date;
   options: VoteOption[];
+  answers: VoteAnswers | null;
 }
 
 export const usePlayerStore = defineStore("player", () => {
@@ -79,11 +84,18 @@ export const usePlayerStore = defineStore("player", () => {
       question: "Which category?",
       endsAt,
       options: categories,
+      answers: null,
     };
   };
 
-  const finishVote = () => {
-    currentVote.value = null;
+  const finishVote = (votes: Votes, winner: number) => {
+    if (!currentVote.value) return;
+    currentVote.value.answers = { votes, winner };
+  };
+
+  const getPlayerById = (playerId: string) => {
+    if (!currentRoom.value) return null;
+    return currentRoom.value.players.find((p) => p.id === playerId) || null;
   };
 
   return {
@@ -100,6 +112,7 @@ export const usePlayerStore = defineStore("player", () => {
     addPlayerToCurrentRoom,
     removePlayerFromCurrentRoom,
     roomNotFound,
+    getPlayerById,
 
     setGameLoading,
     startCategoryVote,

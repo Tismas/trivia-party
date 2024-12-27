@@ -1,8 +1,3 @@
-export interface CategoryDto {
-  id: number;
-  name: string;
-}
-
 export type ClientRoomEventHandlers = {
   "room-joined": (room: Room) => void;
   "room-not-found": () => void;
@@ -20,7 +15,7 @@ export type ClientPlayerEventHandlers = {
 export type ClientGameEventHandlers = {
   "loading-categories": () => void;
   "category-vote-started": (endsAt: string, categories: CategoryDto[]) => void;
-  "category-vote-finished": () => void;
+  "category-vote-finished": (votes: Votes, winner: CategoryDto) => void;
   "loading-questions": () => void;
   "question-vote-started": () => void;
   "question-vote-finished": () => void;

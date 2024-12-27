@@ -1,12 +1,7 @@
+import type { Player } from "../../../common/dto";
 import { router } from "../router";
 import { usePlayerStore } from "../store/playerStore";
-import type { Player } from "./playerEvents";
 import type { TypedSocket } from "./socket";
-
-export interface Room {
-  id: string;
-  players: Player[];
-}
 
 export const handleRoomEvents = (socket: TypedSocket) => {
   socket.on("room-joined", (room) => {
