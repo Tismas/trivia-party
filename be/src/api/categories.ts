@@ -1,7 +1,7 @@
-import { CategoryDto } from "../../../common/dto";
+import { AnswerDto } from "../../../common/dto";
 
 interface CategoriesDto {
-  trivia_categories: CategoryDto[];
+  trivia_categories: AnswerDto[];
 }
 
 interface QuestionDto {

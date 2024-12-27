@@ -71,6 +71,9 @@ class Game {
     const categories = pick(categoriesPool, 4);
     this.categoriesVoteEnd = addSeconds(new Date(), categoryVoteTime);
     this.categoryVotes = {};
+    for (const category of categories) {
+      this.categoryVotes[category.id] = {};
+    }
 
     this.socket.emit(
       "category-vote-started",
@@ -87,7 +90,6 @@ class Game {
       new Date(),
       subSeconds(this.categoriesVoteEnd, categoryVoteTime)
     );
-    this.categoryVotes[categoryId] ||= {};
     this.categoryVotes[categoryId][player.id] = time / 1000;
   }
 
@@ -214,8 +216,9 @@ const getWinner = (votes: Votes): number => {
   );
   const mostVotes = Math.max(...Object.keys(groupedByVotes).map(Number));
   const withMostVotes = groupedByVotes[mostVotes.toString()];
-  if (!withMostVotes)
+  if (!withMostVotes) {
     throw new Error("Something went wrong when choosing vote winner");
+  }
   const winner = pick(withMostVotes, 1)[0];
 
   return Number(winner[0]);
