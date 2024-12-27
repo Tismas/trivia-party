@@ -7,6 +7,8 @@ export class Room {
   constructor() {
     this.id = generateRoomId();
     this.players = [];
+
+    console.log("Room created", this.id);
   }
 
   join(player: Player) {
@@ -18,6 +20,7 @@ export class Room {
     this.players = this.players.filter((p) => p.id !== player.id);
     if (this.players.length === 0) {
       rooms.splice(rooms.indexOf(this), 1);
+      console.log("Room deleted", this.id);
     }
     player.currentRoom = null;
   }
@@ -74,7 +77,3 @@ const generateRandomSymbol = () => {
     "A".charCodeAt(0) + Math.floor(Math.random() * 26)
   );
 };
-
-setInterval(() => {
-  console.log("Current rooms", rooms);
-}, 10000);

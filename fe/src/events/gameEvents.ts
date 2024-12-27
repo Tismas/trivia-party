@@ -32,4 +32,9 @@ export const handleGameEvents = (socket: TypedSocket) => {
     const playerStore = usePlayerStore();
     playerStore.finishVote(votes, correctAnswer);
   });
+
+  socket.on("game-finished", (players) => {
+    const playerStore = usePlayerStore();
+    playerStore.finishGame(players);
+  });
 };

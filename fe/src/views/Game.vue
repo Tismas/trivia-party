@@ -11,7 +11,7 @@ const playerStore = usePlayerStore();
     <Spinner />
   </div>
   <div class="wrapper" v-else>
-    <span class="timer" v-if="!playerStore.currentVote.answers">
+    <span class="timer" v-if="!playerStore.currentVote.results">
       <Timer :until="playerStore.currentVote.endsAt" />
     </span>
     <span class="question" v-html="playerStore.currentVote.question" />
@@ -20,26 +20,38 @@ const playerStore = usePlayerStore();
         class="answer"
         :class="{
           chosen: playerStore.chosenAnswer === option.id,
-          winner: playerStore.currentVote.answers?.winner === option.id,
+          winner: playerStore.currentVote.results?.winner === option.id,
           looser:
-            playerStore.currentVote.answers &&
-            playerStore.currentVote.answers.winner !== option.id,
+            playerStore.currentVote.results &&
+            playerStore.currentVote.results.winner !== option.id,
         }"
         v-for="option in playerStore.currentVote.options"
         @click="playerStore.chooseAnswer(option.id)"
       >
-        {{ option.name }}
+        <span v-html="option.name" />
 
-        <div class="votes" v-if="playerStore.currentVote.answers">
+        <div class="votes" v-if="playerStore.currentVote.results">
           <div
             v-for="[playerId, time] in Object.entries(
-              playerStore.currentVote.answers.votes[option.id] || {}
+              playerStore.currentVote.results.votes[option.id] || {}
             )"
           >
             <div class="vote" v-if="playerStore.getPlayerById(playerId)">
-              <span class="vote-time">{{ time.toFixed(1) }}s</span>
+              <span
+                v-if="playerStore.currentVote.type === 'question'"
+                class="vote-time"
+                >{{ time.toFixed(1) }}s</span
+              >
               <span class="vote-player-name">
                 {{ playerStore.getPlayerById(playerId)?.name }}
+              </span>
+              <span
+                v-if="
+                  playerStore.currentVote.type === 'question' &&
+                  playerStore.currentVote.results?.winner === option.id
+                "
+              >
+                +{{ playerStore.getScore(playerId) }}
               </span>
             </div>
           </div>

@@ -15,15 +15,17 @@ interface CurrentQuestion {
   answers: AnswerDto[];
 }
 
-const categoryVoteTime = 15;
-const showCategoryWinnerTime = 5;
+const categoryVoteTime = 10;
+const showCategoryWinnerTime = 3;
 
-const answerVoteTime = 30;
-const showCorrectAnswerTime = 10;
+const answerVoteTime = 20;
+const showCorrectAnswerTime = 5;
 
 class Game {
   room: Room;
+  started: boolean;
   socket: TypedRoomSocket;
+  maxPoints: number;
 
   categoriesVoteEnd: Date | null;
   categoryVotes: Votes | null;
@@ -36,6 +38,8 @@ class Game {
   constructor(room: Room, socket: TypedRoomSocket) {
     this.room = room;
     this.socket = socket;
+    this.maxPoints = room.players.length * 100;
+    this.started = false;
 
     this.categoriesVoteEnd = null;
     this.categoryVotes = null;
@@ -46,7 +50,22 @@ class Game {
     this.currentQuestion = null;
   }
 
+  start() {
+    console.log(
+      `Starting game for room ${this.room.id}. ${this.room.players.length} players in the room.`
+    );
+    if (this.started) return;
+
+    for (const player of this.room.players) {
+      player.currentPoints = 0;
+    }
+
+    this.started = true;
+    this.startCategoryVote();
+  }
+
   startCategoryVote() {
+    console.log(`Category vote started in room ${this.room.id}`);
     this.socket.emit("loading-categories");
 
     const categories = pick(categoriesPool, 4);
@@ -73,6 +92,7 @@ class Game {
   }
 
   handleCategoryVoteFinish() {
+    console.log(`Category vote finished in room ${this.room.id}`);
     this.categoriesVoteEnd = null;
 
     if (this.categoryVotes) {
@@ -88,6 +108,7 @@ class Game {
 
   async startQuestionVote() {
     if (!this.currentCategory) return;
+    console.log(`Questions started in room ${this.room.id}`);
 
     this.socket.emit("loading-questions");
     const questionEntries = (await getQuestionsPool(this.currentCategory))
@@ -124,6 +145,15 @@ class Game {
         this.questionVotes,
         correctAnswerId
       );
+
+      Object.entries(this.questionVotes[correctAnswerId] || {})
+        .sort(([_, timeA], [__, timeB]) => timeA - timeB)
+        .forEach(([playerId], i) => {
+          const player = this.room.players.find((p) => p.id === playerId);
+          if (!player) return;
+          player.currentPoints += this.maxPoints - i * 100;
+        });
+
       this.questionVotes = null;
       this.questionVoteEnd = null;
       this.currentQuestion = null;
@@ -132,6 +162,7 @@ class Game {
         setTimeout(resolve, showCorrectAnswerTime * 1000)
       );
     }
+    this.finishGame();
   }
 
   voteForAnswer(player: Player, answerId: number) {
@@ -149,13 +180,24 @@ class Game {
     this.questionVotes[answerId] ||= {};
     this.questionVotes[answerId][player.id] = time / 1000;
   }
+
+  finishGame() {
+    console.log(`Game finished room ${this.room.id}`);
+    this.socket.emit(
+      "game-finished",
+      this.room.players.map((p) => p.toDto())
+    );
+    removeGame(this);
+  }
 }
 
 const games: Game[] = [];
 
-export const startGame = (roomId: string, roomSocket: TypedRoomSocket) => {
+export const createGame = (roomId: string, roomSocket: TypedRoomSocket) => {
   const room = findRoom(roomId);
   if (!room) return;
+  const existingGame = games.find((g) => g.room.id === roomId);
+  if (existingGame) return existingGame;
 
   const game = new Game(room, roomSocket);
   games.push(game);
@@ -177,4 +219,8 @@ const getWinner = (votes: Votes): number => {
   const winner = pick(withMostVotes, 1)[0];
 
   return Number(winner[0]);
+};
+
+const removeGame = (game: Game) => {
+  games.splice(games.indexOf(game), 1);
 };

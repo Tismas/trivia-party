@@ -4,17 +4,20 @@ export class Player {
   id: string;
   name: string;
   currentRoom: string | null;
+  currentPoints: number;
 
   constructor() {
     this.id = randomUUID();
     this.name = "";
     this.currentRoom = null;
+    this.currentPoints = 0;
   }
 
   toDto() {
     return {
       id: this.id,
       name: this.name,
+      points: this.currentPoints,
     };
   }
 }
