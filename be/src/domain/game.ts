@@ -85,7 +85,12 @@ class Game {
   }
 
   voteForCategory(player: Player, categoryId: number) {
-    if (!this.categoryVotes || !this.categoriesVoteEnd) return;
+    if (
+      !this.categoryVotes ||
+      !this.categoriesVoteEnd ||
+      playerAlreadyVoted(player, this.categoryVotes)
+    )
+      return;
     const time = differenceInMilliseconds(
       new Date(),
       subSeconds(this.categoriesVoteEnd, categoryVoteTime)
@@ -126,6 +131,11 @@ class Game {
       const answers = shuffle([correct_answer, ...incorrect_answers]).map(
         (answer, i) => ({ id: i, name: answer })
       );
+
+      for (const answer of answers) {
+        this.questionVotes[answer.id] = {};
+      }
+
       const correctAnswerId = answers.find(
         (a) => a.name === correct_answer
       )!.id;
@@ -171,7 +181,8 @@ class Game {
     if (
       !this.questionVotes ||
       !this.questionVoteEnd ||
-      !this.currentQuestion?.answers.map((a) => a.id).includes(answerId)
+      !this.currentQuestion?.answers.map((a) => a.id).includes(answerId) ||
+      playerAlreadyVoted(player, this.questionVotes)
     ) {
       return;
     }
@@ -179,7 +190,6 @@ class Game {
       new Date(),
       subSeconds(this.questionVoteEnd, answerVoteTime)
     );
-    this.questionVotes[answerId] ||= {};
     this.questionVotes[answerId][player.id] = time / 1000;
   }
 
@@ -226,4 +236,11 @@ const getWinner = (votes: Votes): number => {
 
 const removeGame = (game: Game) => {
   games.splice(games.indexOf(game), 1);
+};
+
+const playerAlreadyVoted = (player: Player, votes: Votes): boolean => {
+  const playersWhoVotes = Object.values(votes).flatMap((entry) =>
+    Object.keys(entry)
+  );
+  return playersWhoVotes.includes(player.id);
 };
