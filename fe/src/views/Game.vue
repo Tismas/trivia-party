@@ -26,7 +26,7 @@ const playerStore = usePlayerStore();
             playerStore.currentVote.results.winner !== option.id,
         }"
         v-for="option in playerStore.currentVote.options"
-        @click="playerStore.chooseAnswer(option.id)"
+        @mousedown="playerStore.chooseAnswer(option.id)"
       >
         <span v-html="option.name" />
 
