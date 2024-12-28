@@ -3,7 +3,12 @@ import { RouterView } from "vue-router";
 </script>
 
 <template>
-  <RouterView />
+  <div class="container">
+    <RouterView />
+    <div class="footer">
+      The game uses <a href="https://opentdb.com/">Open Trivia Database</a> api.
+    </div>
+  </div>
 </template>
 
 <style>
@@ -20,7 +25,7 @@ html {
   font-size: 20px;
 }
 
-body {
+.container {
   background: var(--bg);
   color: var(--fg);
 
@@ -28,6 +33,22 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  position: relative;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  text-align: center;
+  font-size: 0.6rem;
+  padding: 4px 0;
+  color: var(--disabled);
+}
+.footer a {
+  font-size: 0.6rem;
+  color: var(--primary);
 }
 
 * {
