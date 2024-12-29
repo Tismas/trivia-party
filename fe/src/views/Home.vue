@@ -11,7 +11,11 @@ const name = ref(localStorage.getItem("name") || "");
 
 <template>
   <div class="wrapper">
-    <Input placeholder="Your name..." v-model="name" />
+    <Input
+      @keyup.enter="playerStore.setName(name)"
+      placeholder="Your name..."
+      v-model="name"
+    />
     <Button
       :disabled="name.length === 0 || playerStore.settingName"
       :loading="playerStore.settingName"

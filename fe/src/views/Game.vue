@@ -11,58 +11,91 @@ const playerStore = usePlayerStore();
     <Spinner />
   </div>
   <div class="wrapper" v-else>
-    <span class="timer" v-if="!playerStore.currentVote.results">
-      <Timer :until="playerStore.currentVote.endsAt" />
-    </span>
-    <span class="question" v-html="playerStore.currentVote.question" />
-    <ul class="answers" :class="{ chosen: !!playerStore.chosenAnswer }">
-      <li
-        class="answer"
-        :class="{
-          chosen: playerStore.chosenAnswer === option.id,
-          winner: playerStore.currentVote.results?.winner === option.id,
-          looser:
-            playerStore.currentVote.results &&
-            playerStore.currentVote.results.winner !== option.id,
-        }"
-        v-for="option in playerStore.currentVote.options"
-        @mousedown="playerStore.chooseAnswer(option.id)"
-      >
-        <span v-html="option.name" />
+    <div class="header" v-if="playerStore.currentVote.category">
+      <span class="header-category" v-html="playerStore.currentVote.category" />
+      <span class="header-question">
+        Question {{ playerStore.currentVote.index }}/{{
+          playerStore.currentVote.total
+        }}
+      </span>
+    </div>
+    <div v-else></div>
+    <div class="question-wrapper">
+      <span class="timer" v-if="!playerStore.currentVote.results">
+        <Timer :until="playerStore.currentVote.endsAt" />
+      </span>
+      <span class="question" v-html="playerStore.currentVote.question" />
+      <ul class="answers" :class="{ chosen: !!playerStore.chosenAnswer }">
+        <li
+          class="answer"
+          :class="{
+            chosen: playerStore.chosenAnswer === option.id,
+            winner: playerStore.currentVote.results?.winner === option.id,
+            looser:
+              playerStore.currentVote.results &&
+              playerStore.currentVote.results.winner !== option.id,
+          }"
+          v-for="option in playerStore.currentVote.options"
+          @mousedown="playerStore.chooseAnswer(option.id)"
+        >
+          <span v-html="option.name" />
 
-        <div class="votes" v-if="playerStore.currentVote.results">
-          <div
-            v-for="[playerId, time] in Object.entries(
-              playerStore.currentVote.results.votes[option.id] || {}
-            )"
-          >
-            <div class="vote" v-if="playerStore.getPlayerById(playerId)">
-              <span
-                v-if="playerStore.currentVote.type === 'question'"
-                class="vote-time"
-                >{{ time.toFixed(1) }}s</span
-              >
-              <span class="vote-player-name">
-                {{ playerStore.getPlayerById(playerId)?.name }}
-              </span>
-              <span
-                v-if="
-                  playerStore.currentVote.type === 'question' &&
-                  playerStore.currentVote.results?.winner === option.id
-                "
-              >
-                +{{ playerStore.getScore(playerId) }}
-              </span>
+          <div class="votes" v-if="playerStore.currentVote.results">
+            <div
+              v-for="[playerId, time] in Object.entries(
+                playerStore.currentVote.results.votes[option.id] || {}
+              )"
+            >
+              <div class="vote" v-if="playerStore.getPlayerById(playerId)">
+                <span
+                  v-if="playerStore.currentVote.type === 'question'"
+                  class="vote-time"
+                  >{{ time.toFixed(1) }}s</span
+                >
+                <span class="vote-player-name">
+                  {{ playerStore.getPlayerById(playerId)?.name }}
+                </span>
+                <span
+                  v-if="
+                    playerStore.currentVote.type === 'question' &&
+                    playerStore.currentVote.results?.winner === option.id
+                  "
+                >
+                  +{{ playerStore.getScore(playerId) }}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-      </li>
-    </ul>
+        </li>
+      </ul>
+    </div>
+    <div></div>
   </div>
 </template>
 
 <style scoped>
 .wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 20px;
+}
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.header-category {
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+.header-question {
+  font-size: 0.7rem;
+}
+.question-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;

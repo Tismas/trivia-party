@@ -15,6 +15,9 @@ interface Vote {
   endsAt: Date;
   options: AnswerDto[];
   results: VoteAnswers | null;
+  category: string | null;
+  index: number;
+  total: number;
 }
 
 export const usePlayerStore = defineStore("player", () => {
@@ -26,6 +29,7 @@ export const usePlayerStore = defineStore("player", () => {
   const currentRoom = ref<Room | null>(null);
   const chosenAnswer = ref<number | null>(null);
   const finalScores = ref<Player[] | null>(null);
+  const joinError = ref<string | null>(null);
 
   const setName = (newName: string) => {
     if (!newName) return;
@@ -45,6 +49,7 @@ export const usePlayerStore = defineStore("player", () => {
     if (!roomId) return;
 
     socket.emit("join-room", roomId);
+    joinError.value = null;
     joiningRoom.value = true;
   };
 
@@ -61,6 +66,7 @@ export const usePlayerStore = defineStore("player", () => {
   const roomNotFound = () => {
     joiningRoom.value = false;
     currentRoom.value = null;
+    joinError.value = "Room not found";
   };
 
   const setRoom = (room: Room) => {
@@ -71,6 +77,7 @@ export const usePlayerStore = defineStore("player", () => {
     currentRoom.value = null;
     joiningRoom.value = false;
     settingName.value = false;
+    joinError.value = null;
   };
 
   const setGameLoading = () => {
@@ -81,7 +88,10 @@ export const usePlayerStore = defineStore("player", () => {
     endsAt: Date,
     type: Vote["type"],
     question: string,
-    answers: AnswerDto[]
+    answers: AnswerDto[],
+    category: string | null,
+    index: number,
+    total: number
   ) => {
     gameLoading.value = false;
     chosenAnswer.value = null;
@@ -92,6 +102,9 @@ export const usePlayerStore = defineStore("player", () => {
       endsAt,
       options: answers,
       results: null,
+      category,
+      index,
+      total,
     };
   };
 
@@ -152,6 +165,7 @@ export const usePlayerStore = defineStore("player", () => {
     removePlayerFromCurrentRoom,
     roomNotFound,
     getPlayerById,
+    joinError,
 
     chosenAnswer,
     chooseAnswer,

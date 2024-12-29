@@ -10,7 +10,12 @@ const name = ref("");
 
 <template>
   <div class="wrapper">
-    <Input placeholder="ROOM-CODE" v-model="name" />
+    <Input
+      @keyup.enter="playerStore.joinRoom(name)"
+      placeholder="ROOM-CODE"
+      :error="playerStore.joinError"
+      v-model="name"
+    />
     <Button
       :loading="playerStore.joiningRoom"
       :disabled="name.length === 0 || playerStore.joiningRoom"

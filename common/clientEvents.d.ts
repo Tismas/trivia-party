@@ -24,7 +24,10 @@ export type ClientGameEventHandlers = {
   "question-vote-started": (
     endsAt: string,
     question: string,
-    answers: AnswerDto[]
+    answers: AnswerDto[],
+    category: string | null,
+    index: number,
+    total: number
   ) => void;
   "question-vote-finished": (votes: Votes, correctAnswer: number) => void;
 };

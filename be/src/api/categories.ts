@@ -24,10 +24,11 @@ export const getCategoriesPool = async (): Promise<CategoriesDto> => {
 };
 
 export const getQuestionsPool = async (
-  categoryId: number
+  categoryId: number,
+  amount: number
 ): Promise<QuestionsDto> => {
   const res = await fetch(
-    `https://opentdb.com/api.php?amount=4&category=${categoryId}&type=multiple`
+    `https://opentdb.com/api.php?amount=${amount}&category=${categoryId}&type=multiple`
   );
   return res.json() as Promise<QuestionsDto>;
 };

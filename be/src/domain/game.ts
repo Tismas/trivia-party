@@ -17,6 +17,7 @@ interface CurrentQuestion {
 
 const categoryVoteTime = 10;
 const showCategoryWinnerTime = 3;
+const amountOfQuestionsInCategory = 5;
 
 const answerVoteTime = 20;
 const showCorrectAnswerTime = 5;
@@ -118,14 +119,14 @@ class Game {
     console.log(`Questions started in room ${this.room.id}`);
 
     this.socket.emit("loading-questions");
-    const questionEntries = (await getQuestionsPool(this.currentCategory))
-      .results;
+    const questionEntries = (
+      await getQuestionsPool(this.currentCategory, amountOfQuestionsInCategory)
+    ).results;
 
-    for (const {
-      question,
-      incorrect_answers,
-      correct_answer,
-    } of questionEntries) {
+    for (const [
+      index,
+      { question, incorrect_answers, correct_answer, category },
+    ] of Object.entries(questionEntries)) {
       this.questionVoteEnd = addSeconds(new Date(), answerVoteTime);
       this.questionVotes = {};
       const answers = shuffle([correct_answer, ...incorrect_answers]).map(
@@ -145,7 +146,10 @@ class Game {
         "question-vote-started",
         this.questionVoteEnd.toISOString(),
         question,
-        answers
+        answers,
+        category,
+        Number(index) + 1,
+        amountOfQuestionsInCategory
       );
 
       await new Promise((resolve) =>
