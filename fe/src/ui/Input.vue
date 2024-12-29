@@ -1,11 +1,14 @@
 <script setup lang="ts">
 const value = defineModel({ required: true });
-const { error, ...rest } = defineProps<{ error?: string | null }>();
+const { error, placeholder } = defineProps<{
+  error?: string | null;
+  placeholder: string;
+}>();
 </script>
 
 <template>
   <div class="input-wrapper">
-    <input v-model="value" v-bind="rest" :class="{ error }" />
+    <input :placeholder="placeholder" v-model="value" :class="{ error }" />
     <span v-if="error" class="error-message">{{ error }}</span>
   </div>
 </template>
