@@ -21,8 +21,11 @@ const playerStore = usePlayerStore();
     </div>
     <div v-else></div>
     <div class="question-wrapper">
-      <span class="timer" v-if="!playerStore.currentVote.results">
-        <Timer :until="playerStore.currentVote.endsAt" />
+      <span class="timer">
+        <Timer
+          :key="playerStore.currentVote.question"
+          :until="playerStore.currentVote.endsAt"
+        />
       </span>
       <span class="question" v-html="playerStore.currentVote.question" />
       <ul class="answers" :class="{ chosen: !!playerStore.chosenAnswer }">
