@@ -17,4 +17,11 @@ export interface Room {
 
 type AnswerId = string;
 type VoteTime = number;
-export type Votes = Record<AnswerId, Record<PlayerId, VoteTime>>;
+
+export interface VoteEntry {
+  time: number;
+  playerId: string;
+}
+
+export type VotesDto = Record<string, VoteEntry[]>;
+export type VoteType = "category" | "question";

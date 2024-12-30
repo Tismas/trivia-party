@@ -1,11 +1,11 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { socket } from "../io";
-import type { AnswerDto, Player, Room, Votes } from "../../../common/dto";
+import type { AnswerDto, Player, Room, VotesDto } from "../../../common/dto";
 import { router } from "../router";
 
 interface VoteAnswers {
-  votes: Votes;
+  votes: VotesDto;
   winner: number;
 }
 
@@ -119,7 +119,7 @@ export const usePlayerStore = defineStore("player", () => {
     }
   };
 
-  const finishVote = (votes: Votes, winner: number) => {
+  const finishVote = (votes: VotesDto, winner: number) => {
     if (!currentVote.value) return;
     currentVote.value.results = { votes, winner };
   };
@@ -140,9 +140,9 @@ export const usePlayerStore = defineStore("player", () => {
     const maxPoints = currentRoom.value.players.length * 100;
     const correctAnswers =
       currentVote.value.results.votes[currentVote.value.results.winner];
-    const place = Object.entries(correctAnswers)
-      .sort(([_, timeA], [__, timeB]) => timeA - timeB)
-      .map(([playerId]) => playerId)
+    const place = correctAnswers
+      .sort(({ time: timeA }, { time: timeB }) => timeA - timeB)
+      .map(({ playerId }) => playerId)
       .indexOf(playerId);
     if (place === -1) return 0;
 

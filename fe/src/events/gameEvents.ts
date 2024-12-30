@@ -6,34 +6,13 @@ export const handleGameEvents = (socket: TypedSocket) => {
     const playerStore = usePlayerStore();
     playerStore.setGameLoading();
   });
-  socket.on("category-vote-started", (endsAt, categories) => {
-    const playerStore = usePlayerStore();
-    playerStore.startVote(
-      new Date(endsAt),
-      "category",
-      "Which category?",
-      categories,
-      null,
-      1,
-      1
-    );
-  });
-  socket.on("category-vote-finished", (votes, winner) => {
-    const playerStore = usePlayerStore();
-    playerStore.finishVote(votes, winner);
-  });
-
-  socket.on("loading-questions", () => {
-    const playerStore = usePlayerStore();
-    playerStore.setGameLoading();
-  });
   socket.on(
-    "question-vote-started",
-    (endsAt, question, answers, category, index, total) => {
+    "vote-started",
+    (endsAt, type, question, answers, category, index, total) => {
       const playerStore = usePlayerStore();
       playerStore.startVote(
         new Date(endsAt),
-        "question",
+        type,
         question,
         answers,
         category,
@@ -42,9 +21,14 @@ export const handleGameEvents = (socket: TypedSocket) => {
       );
     }
   );
-  socket.on("question-vote-finished", (votes, correctAnswer) => {
+  socket.on("vote-finished", (votes, winner) => {
     const playerStore = usePlayerStore();
-    playerStore.finishVote(votes, correctAnswer);
+    playerStore.finishVote(votes, winner);
+  });
+
+  socket.on("loading-questions", () => {
+    const playerStore = usePlayerStore();
+    playerStore.setGameLoading();
   });
 
   socket.on("game-finished", (players) => {

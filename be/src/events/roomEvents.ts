@@ -1,44 +1,23 @@
-import { createRoom, joinRoom, leaveRoom, type Room } from "../domain/room";
+import { findRoom, Room } from "../domain/room";
 import type { TypedServerSocket } from "./socket";
-import { io } from "../index";
 
 export const handleRoomEvents = (socket: TypedServerSocket) => {
   socket.on("create-room", () => {
-    const room = createRoom();
-    const joinedRoom = joinRoom(room.id, socket.data.player);
-
-    if (joinedRoom) {
-      joinSocketRoom(socket, joinedRoom);
-    }
+    const room = new Room();
+    socket.data.player.joinRoom(room);
   });
 
   socket.on("join-room", (roomId) => {
-    const joinedRoom = joinRoom(roomId, socket.data.player);
-
-    if (joinedRoom) {
-      io.to(joinedRoom.id).emit("player-joined", socket.data.player.toDto());
-      joinSocketRoom(socket, joinedRoom);
-    } else {
+    const room = findRoom(roomId);
+    if (!room) {
       socket.emit("room-not-found");
+      return;
     }
+
+    socket.data.player.joinRoom(room);
   });
 
   socket.on("leave-room", () => {
-    const leftRoom = leaveRoom(socket.data.player);
-
-    if (leftRoom) {
-      leaveSocketRoom(socket, leftRoom);
-    }
+    socket.data.player.leaveRoom();
   });
-};
-
-const joinSocketRoom = (socket: TypedServerSocket, room: Room) => {
-  socket.join(room.id);
-  socket.emit("room-joined", room.toDto());
-};
-
-export const leaveSocketRoom = (socket: TypedServerSocket, room: Room) => {
-  socket.leave(room.id);
-  socket.emit("room-left", room.id, socket.data.player.id);
-  io.to(room.id).emit("player-left", socket.data.player.toDto());
 };

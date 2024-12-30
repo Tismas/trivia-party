@@ -25,6 +25,7 @@ const playerStore = usePlayerStore();
         <Timer
           :key="playerStore.currentVote.question"
           :until="playerStore.currentVote.endsAt"
+          :stopped="Boolean(playerStore.currentVote.results)"
         />
       </span>
       <span class="question" v-html="playerStore.currentVote.question" />
@@ -45,7 +46,7 @@ const playerStore = usePlayerStore();
 
           <div class="votes" v-if="playerStore.currentVote.results">
             <div
-              v-for="[playerId, time] in Object.entries(
+              v-for="{ playerId, time } in Object.values(
                 playerStore.currentVote.results.votes[option.id] || {}
               )"
             >

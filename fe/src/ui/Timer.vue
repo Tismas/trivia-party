@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { differenceInMilliseconds } from "date-fns";
 import { ref } from "vue";
-const props = defineProps<{ until: Date }>();
+const props = defineProps<{ until: Date; stopped?: boolean }>();
 
 const getTimeLeft = () => {
   const left = differenceInMilliseconds(props.until, new Date());
@@ -12,10 +12,12 @@ const getTimeLeft = () => {
 const timeLeft = ref(getTimeLeft());
 
 const updateTimer = () => {
-  timeLeft.value = getTimeLeft();
+  if (!props.stopped) {
+    timeLeft.value = getTimeLeft();
+  }
 
   if (timeLeft.value > 0) {
-    setTimeout(updateTimer, 1000 / 30);
+    setTimeout(updateTimer, 1000 / 20);
   }
 };
 
