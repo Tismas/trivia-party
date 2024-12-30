@@ -59,7 +59,7 @@ export class Room {
 const rooms: Record<string, Room> = {};
 
 export const findRoom = (roomId: string): Room | null => {
-  return rooms[roomId] || null;
+  return rooms[roomId.toUpperCase()] || null;
 };
 
 const generateRoomId = () => {
