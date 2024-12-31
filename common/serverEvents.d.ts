@@ -12,6 +12,7 @@ export type ServerRoomEventHandlers = {
   "join-room": (roomId: string) => void;
   "leave-room": () => void;
   "start-game": () => void;
+  "back-to-lobby": () => void;
 };
 
 export type ServerEventHandlers = ServerGameEventHandlers &

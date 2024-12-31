@@ -9,6 +9,7 @@ export type ClientRoomEventHandlers = {
   "game-started": () => void;
   "invalid-game": () => void;
   "game-finished": (players: Player[]) => void;
+  "back-to-lobby": () => void;
 };
 
 export type ClientPlayerEventHandlers = {

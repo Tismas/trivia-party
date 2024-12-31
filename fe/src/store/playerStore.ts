@@ -71,6 +71,7 @@ export const usePlayerStore = defineStore("player", () => {
 
   const setRoom = (room: Room) => {
     currentRoom.value = room;
+    joiningRoom.value = false;
   };
 
   const reset = () => {

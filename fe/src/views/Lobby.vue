@@ -20,6 +20,10 @@ const handleRoomCopy = () => {
 const handleGameStart = () => {
   socket.emit("start-game");
 };
+
+const handleLeaveRoom = () => {
+  socket.emit("leave-room");
+};
 </script>
 
 <template>
@@ -41,12 +45,15 @@ const handleGameStart = () => {
         </li>
       </ul>
     </div>
-    <Button
-      @click="handleGameStart()"
-      :disabled="playerStore.currentRoom.players.length <= 1"
-    >
-      Start game
-    </Button>
+    <div class="actions">
+      <Button @click="handleLeaveRoom()">Leave room</Button>
+      <Button
+        @click="handleGameStart()"
+        :disabled="playerStore.currentRoom.players.length <= 1"
+      >
+        Start game
+      </Button>
+    </div>
   </div>
 </template>
 
@@ -89,5 +96,11 @@ const handleGameStart = () => {
   text-align: center;
   font-size: 1.2rem;
   font-weight: bold;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 </style>

@@ -20,4 +20,11 @@ export const handleRoomEvents = (socket: TypedServerSocket) => {
   socket.on("leave-room", () => {
     socket.data.player.leaveRoom();
   });
+
+  socket.on("back-to-lobby", () => {
+    const room = socket.data.player.room;
+    if (!room) return;
+
+    room.socket.emit("back-to-lobby");
+  });
 };

@@ -9,6 +9,14 @@ const playerStore = usePlayerStore();
 const handleGameRestart = () => {
   socket.emit("start-game");
 };
+
+const handleLeaveRoom = () => {
+  socket.emit("leave-room");
+};
+
+const handleBackToLobby = () => {
+  socket.emit("back-to-lobby");
+};
 </script>
 
 <template>
@@ -24,7 +32,11 @@ const handleGameRestart = () => {
       <div class="player-name">{{ player.name }}</div>
       <div class="points">{{ player.points }}</div>
     </div>
-    <Button @click="handleGameRestart()">Play again</Button>
+    <div class="actions">
+      <Button @click="handleBackToLobby()">Back to lobby</Button>
+      <Button @click="handleLeaveRoom()">Leave room</Button>
+      <Button @click="handleGameRestart()">Play again</Button>
+    </div>
   </div>
 </template>
 
@@ -46,5 +58,10 @@ const handleGameRestart = () => {
 }
 .crown.third {
   color: #78350f;
+}
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 </style>

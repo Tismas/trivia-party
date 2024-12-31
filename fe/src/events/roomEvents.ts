@@ -25,6 +25,10 @@ export const handleRoomEvents = (socket: TypedSocket) => {
     playerStore.removePlayerFromCurrentRoom(player);
   });
 
+  socket.on("room-left", () => {
+    router.push("/menu");
+  });
+
   socket.on("game-started", () => {
     router.push("/game");
   });
@@ -33,5 +37,9 @@ export const handleRoomEvents = (socket: TypedSocket) => {
     router.push("/menu");
     const playerStore = usePlayerStore();
     playerStore.reset();
+  });
+
+  socket.on("back-to-lobby", () => {
+    router.push("/lobby");
   });
 };
