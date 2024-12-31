@@ -82,6 +82,8 @@ export class Vote {
   }
 
   vote(player: Player, answerId: number) {
+    if (Number(new Date()) > Number(this.endsAt)) return;
+
     this.votes.addVote(player, answerId, this.startedAt);
 
     if (this.votes.getTotalVotes() === this.room.players.length) {
@@ -90,7 +92,10 @@ export class Vote {
   }
 
   handleVoteFinish() {
-    if (this.voteEndTimeoutId) clearTimeout(this.voteEndTimeoutId);
+    if (this.voteEndTimeoutId) {
+      clearTimeout(this.voteEndTimeoutId);
+      this.voteEndTimeoutId = null;
+    }
     console.log(`Vote for ${this.type} finished in room ${this.room.id}`);
 
     this.onFinish?.(this.votes);

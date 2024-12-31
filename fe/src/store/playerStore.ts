@@ -55,7 +55,9 @@ export const usePlayerStore = defineStore("player", () => {
 
   const removePlayerFromCurrentRoom = (player: Player) => {
     if (!currentRoom.value) return;
-    currentRoom.value.players.splice(currentRoom.value.players.indexOf(player));
+    currentRoom.value.players = currentRoom.value.players.filter(
+      (p) => p.id !== player.id
+    );
   };
 
   const addPlayerToCurrentRoom = (player: Player) => {
