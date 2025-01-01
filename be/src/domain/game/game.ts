@@ -8,15 +8,16 @@ import {
 } from "../../api/categories";
 import { Vote, Votes } from "./vote";
 import { AnswerDto } from "../../../../common/dto";
+import { config } from "../../config";
 
 const categoriesPool = (await getCategoriesPool()).trivia_categories;
 
 const amountOfQuestionsInCategory = 5;
 const categoryVoteTime = 10;
-const showCategoryWinnerTime = 3;
+const showCategoryWinnerTime = config.mockQuestions ? 1 : 3;
 
 const questionVoteTime = 20;
-const showCorrectAnswerTime = 5;
+const showCorrectAnswerTime = config.mockQuestions ? 1 : 5;
 
 export class Game {
   room: Room;

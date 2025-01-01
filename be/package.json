@@ -4,6 +4,7 @@
   "description": "",
   "scripts": {
     "start": "bun ./src/index.ts",
+    "start:e2e": "cross-env NODE_ENV=TEST bun ./src/index.ts",
     "dev": "nodemon"
   },
   "keywords": [],
@@ -16,6 +17,7 @@
     "@types/morgan": "^1.9.9",
     "@types/node": "^22.10.2",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "date-fns": "^4.1.0",
     "express": "^4.21.2",
     "morgan": "^1.10.0",

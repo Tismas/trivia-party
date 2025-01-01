@@ -1,4 +1,5 @@
 import { AnswerDto } from "../../../common/dto";
+import { config } from "../config";
 
 interface CategoriesDto {
   trivia_categories: AnswerDto[];
@@ -130,6 +131,26 @@ export const getQuestionsPool = async (
   categoryId: number,
   amount: number
 ): Promise<QuestionsDto> => {
+  if (config.mockQuestions) {
+    console.log("Returning mocked questions");
+
+    const category = categoriesResponse.trivia_categories.find(
+      (c) => c.id === categoryId
+    )?.name;
+    if (!category) throw new Error(`Category with id ${categoryId} not found`);
+    return {
+      response_code: 0,
+      results: new Array(5).fill({
+        category,
+        correct_answer: "Correct",
+        incorrect_answers: ["Incorrect 1", "Incorrect 2", "Incorrect 3"],
+        difficulty: "easy",
+        question: "Mocked question",
+        type: "multiple",
+      }),
+    };
+  }
+
   const res = await fetch(
     `https://opentdb.com/api.php?amount=${amount}&category=${categoryId}&type=multiple`
   );

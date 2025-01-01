@@ -6,4 +6,5 @@ const getEnvVariable = (name: string) => {
 
 export const config = {
   socketPath: getEnvVariable("SOCKET_PATH"),
+  mockQuestions: process.env.NODE_ENV === "TEST",
 };

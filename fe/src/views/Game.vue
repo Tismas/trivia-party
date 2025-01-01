@@ -42,7 +42,7 @@ const playerStore = usePlayerStore();
           v-for="option in playerStore.currentVote.options"
           @mousedown="playerStore.chooseAnswer(option.id)"
         >
-          <span v-html="option.name" />
+          <span v-html="option.name" data-testid="answer" />
 
           <div class="votes" v-if="playerStore.currentVote.results">
             <div

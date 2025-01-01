@@ -32,7 +32,7 @@ const handleLeaveRoom = () => {
     <div class="title">
       Room code
       <span class="code" :class="{ copied }" @click="handleRoomCopy()">
-        {{ playerStore.currentRoom.id }}
+        <span data-testid="room-code">{{ playerStore.currentRoom.id }}</span>
         <CopyIcon v-if="!copied" />
         <CheckIcon v-else />
       </span>
