@@ -4,18 +4,8 @@
 
 ### Plan
 
-Events:
+TODO:
 
-Room set up:
-
-- create room (generate random room id)
-- join room
-- leave room
-- set nickname
-- start game
-
-Game:
-
-- vote for category
-- answer question
-- round finished (scores based on fastest answer)
+- when player disconnects, show as if he left room but still allow him to reconnect
+- fix issue when someone enters the page from 2 tabs and lefts one of the tabs
+- add ready state instead of starting the game right away

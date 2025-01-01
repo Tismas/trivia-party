@@ -103,6 +103,7 @@ test("works with inactive players", async ({ browser }) => {
   await p1Page.getByText("Play again").waitFor();
   await p2Page.getByText("Play again").waitFor();
   expect(p1Page.getByText("0")).toHaveCount(2);
+  expect(p2Page.getByText("0")).toHaveCount(2);
 
   await player1.close();
   await player2.close();
