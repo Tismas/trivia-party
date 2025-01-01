@@ -47,12 +47,7 @@ const handleLeaveRoom = () => {
     </div>
     <div class="actions">
       <Button @click="handleLeaveRoom()">Leave room</Button>
-      <Button
-        @click="handleGameStart()"
-        :disabled="playerStore.currentRoom.players.length <= 1"
-      >
-        Start game
-      </Button>
+      <Button @click="handleGameStart()"> Start game </Button>
     </div>
   </div>
 </template>

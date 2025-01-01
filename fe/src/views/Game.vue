@@ -20,14 +20,13 @@ const playerStore = usePlayerStore();
       </span>
     </div>
     <div v-else></div>
+
+    <Timer
+      :key="playerStore.currentVote.question"
+      :until="playerStore.currentVote.endsAt"
+      :stopped="Boolean(playerStore.currentVote.results)"
+    />
     <div class="question-wrapper">
-      <span class="timer">
-        <Timer
-          :key="playerStore.currentVote.question"
-          :until="playerStore.currentVote.endsAt"
-          :stopped="Boolean(playerStore.currentVote.results)"
-        />
-      </span>
       <span class="question" v-html="playerStore.currentVote.question" />
       <ul class="answers" :class="{ chosen: !!playerStore.chosenAnswer }">
         <li
@@ -83,7 +82,6 @@ const playerStore = usePlayerStore();
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  height: 100%;
   padding: 20px;
 }
 .header {
