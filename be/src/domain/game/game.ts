@@ -13,10 +13,10 @@ import { config } from "../../config";
 const categoriesPool = (await getCategoriesPool()).trivia_categories;
 
 const amountOfQuestionsInCategory = 5;
-const categoryVoteTime = 10;
+const categoryVoteTime = config.mockQuestions ? 3 : 10;
 const showCategoryWinnerTime = config.mockQuestions ? 1 : 3;
 
-const questionVoteTime = 20;
+const questionVoteTime = config.mockQuestions ? 3 : 20;
 const showCorrectAnswerTime = config.mockQuestions ? 1 : 5;
 
 export class Game {

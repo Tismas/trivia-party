@@ -34,7 +34,7 @@ test("play regular game", async ({ browser }) => {
   await player2.close();
 });
 
-test("Joining and leaving room works correctly", async ({ browser }) => {
+test("joining and leaving room works correctly", async ({ browser }) => {
   const player1 = await browser.newContext();
   const player2 = await browser.newContext();
 
@@ -77,6 +77,35 @@ test("Joining and leaving room works correctly", async ({ browser }) => {
 
   await joinRoom(p1Page, roomCode, true);
   await joinRoom(p2Page, roomCode, false);
+});
+
+test("works with inactive players", async ({ browser }) => {
+  const player1 = await browser.newContext();
+  const player2 = await browser.newContext();
+
+  const p1Page = await player1.newPage();
+  const p2Page = await player2.newPage();
+
+  await p1Page.goto("/");
+  await p2Page.goto("/");
+
+  await setNickname(p1Page, "Player 1");
+  await setNickname(p2Page, "Player 2");
+
+  const roomCode = await createRoom(p1Page);
+  await joinRoom(p2Page, roomCode);
+
+  const players = ["Player 1", "Player 2"];
+  expectPlayersInRoom(p1Page, players);
+  expectPlayersInRoom(p2Page, players);
+
+  await startGame(p1Page);
+  await p1Page.getByText("Play again").waitFor();
+  await p2Page.getByText("Play again").waitFor();
+  expect(p1Page.getByText("0")).toHaveCount(2);
+
+  await player1.close();
+  await player2.close();
 });
 
 const setNickname = async (page: Page, name: string) => {
