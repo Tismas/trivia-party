@@ -5,13 +5,19 @@ const props = defineProps<{ currentVote: Vote }>();
 </script>
 
 <template>
-  <div class="header-container" v-if="props.currentVote.category">
-    <span class="header-category" v-html="props.currentVote.category" />
+  <div class="header-container">
+    <span
+      class="header-category"
+      v-if="props.currentVote.category"
+      v-html="props.currentVote.category"
+    />
     <span class="header-question">
-      Question {{ props.currentVote.index }}/{{ props.currentVote.total }}
+      <span v-if="props.currentVote.category">Question</span
+      ><span v-else>Round</span> {{ props.currentVote.index }}/{{
+        props.currentVote.total
+      }}
     </span>
   </div>
-  <div v-else></div>
 </template>
 
 <style scoped>

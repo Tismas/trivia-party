@@ -12,7 +12,8 @@ import { config } from "../../config";
 
 const categoriesPool = (await getCategoriesPool()).trivia_categories;
 
-const amountOfQuestionsInCategory = 5;
+const amountOfRounds = 3;
+const amountOfQuestionsInCategory = 3;
 const categoryVoteTime = config.mockQuestions ? 3 : 10;
 const showCategoryWinnerTime = config.mockQuestions ? 1 : 3;
 
@@ -25,6 +26,7 @@ export class Game {
   currentCategory: number | null;
   questions: QuestionDto[] | null;
   currentVote: Vote;
+  round: number;
   finished: boolean;
 
   constructor(room: Room) {
@@ -37,23 +39,24 @@ export class Game {
     this.finished = false;
     this.currentCategory = null;
     this.questions = null;
-    this.currentVote = new Vote({
+    this.round = 1;
+    this.currentVote = this.getCategoryVote();
+
+    this.room.socket.emit("game-started");
+  }
+
+  getCategoryVote() {
+    return new Vote({
       room: this.room,
       type: "category",
       question: "Vote for category!",
       options: this.getCategoryOptions(),
       voteTime: categoryVoteTime,
       category: null,
-      index: 1,
-      total: 1,
+      index: this.round,
+      total: amountOfRounds,
       onFinish: (votes) => this.handleCategoryVoteFinish(votes),
     });
-
-    this.room.socket.emit("game-started");
-  }
-
-  terminate() {
-    // TODO kill everything
   }
 
   getCategoryOptions() {
@@ -97,7 +100,12 @@ export class Game {
     if (!this.questions || this.room.players.length === 0) return;
     const questionEntry = this.questions.pop();
     if (!questionEntry) {
-      this.finishGame();
+      if (this.round < amountOfRounds) {
+        this.round++;
+        this.currentVote = this.getCategoryVote();
+      } else {
+        this.finishGame();
+      }
       return;
     }
 
@@ -161,5 +169,6 @@ export class Game {
       "game-finished",
       this.room.players.map((p) => p.toDto())
     );
+    this.room.game = null;
   }
 }

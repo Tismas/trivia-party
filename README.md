@@ -7,7 +7,6 @@
 TODO:
 
 - add ready state instead of starting the game right away
-- 3 category votes with 3 questions each
 
 - when player disconnects, show as if he left room but still allow him to reconnect
 - fix issue when someone enters the page from 2 tabs and lefts one of the tabs

@@ -46,8 +46,8 @@ const handleLeaveRoom = () => {
       </ul>
     </div>
     <div class="actions">
-      <Button @click="handleLeaveRoom()">Leave room</Button>
       <Button @click="handleGameStart()"> Start game </Button>
+      <Button @click="handleLeaveRoom()">Leave room</Button>
     </div>
   </div>
 </template>

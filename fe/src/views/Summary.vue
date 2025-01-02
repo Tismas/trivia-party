@@ -38,8 +38,8 @@ const handleBackToLobby = () => {
     </div>
     <div class="actions">
       <Button @click="handleBackToLobby()">Back to lobby</Button>
-      <Button @click="handleLeaveRoom()">Leave room</Button>
       <Button @click="handleGameRestart()">Play again</Button>
+      <Button @click="handleLeaveRoom()">Leave room</Button>
     </div>
   </div>
 </template>
@@ -50,6 +50,7 @@ const handleBackToLobby = () => {
   flex-direction: column;
   text-align: center;
   width: 100%;
+  max-width: 600px;
   padding: 20px;
 }
 .scores {

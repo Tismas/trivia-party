@@ -30,9 +30,6 @@ export class Room {
     this.players = this.players.filter((p) => p.id !== player.id);
 
     if (this.players.length === 0) {
-      if (this.game) {
-        this.game.terminate();
-      }
       delete rooms[this.id];
       console.log("Room deleted", this.id);
     } else {
@@ -41,6 +38,7 @@ export class Room {
   }
 
   startGame() {
+    if (this.game) return;
     for (const player of this.players) {
       player.currentPoints = 0;
     }
