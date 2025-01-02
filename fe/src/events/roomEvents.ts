@@ -40,6 +40,6 @@ export const handleRoomEvents = (socket: TypedSocket) => {
   });
 
   socket.on("connection-reset", () => {
-    router.push("/home");
+    router.push("/");
   });
 };

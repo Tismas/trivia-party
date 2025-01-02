@@ -60,6 +60,7 @@ io.on("connection", (socket) => {
   handleRoomEvents(socket);
 
   socket.on("disconnect", () => {
+    console.log(`Player ${socket.data.player.name} lost connection`);
     socket.data.player.disconnectedAt = new Date();
   });
 });
