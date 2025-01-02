@@ -41,6 +41,10 @@ export const usePlayerStore = defineStore("player", () => {
     settingName.value = true;
   };
 
+  const setNameChanged = () => {
+    settingName.value = false;
+  };
+
   const createRoom = () => {
     socket.emit("create-room");
     joiningRoom.value = true;
@@ -158,6 +162,7 @@ export const usePlayerStore = defineStore("player", () => {
   return {
     name,
     setName,
+    setNameChanged,
     settingName,
     reset,
     finalScores,

@@ -30,6 +30,8 @@ io.on("connection", (socket) => {
 
   if (!findPlayer(userId)) {
     socket.emit("connection-reset");
+  } else {
+    console.log(`Player ${userId} reconnected`);
   }
 
   const player = getOrCreatePlayer(socket, userId);
@@ -60,7 +62,7 @@ io.on("connection", (socket) => {
   handleRoomEvents(socket);
 
   socket.on("disconnect", () => {
-    console.log(`Player ${socket.data.player.name} lost connection`);
+    console.log(`Player ${userId} lost connection`);
     socket.data.player.disconnectedAt = new Date();
   });
 });

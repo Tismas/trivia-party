@@ -29,6 +29,7 @@ const props = defineProps<{ currentVote: Vote; option: AnswerDto }>();
 .votes {
   display: flex;
   justify-content: space-around;
+  flex-wrap: wrap;
   gap: 16px;
   margin-top: 4px;
 }

@@ -2,7 +2,7 @@ import { randomUUID } from "crypto";
 import type { Room } from "./room";
 import { TypedServerSocket } from "../events/socket";
 
-const playerTimeoutAfterDisconnect = 15; // in seconds
+const playerTimeoutAfterDisconnect = 15 * 60; // in seconds
 
 export class Player {
   socket: TypedServerSocket;
