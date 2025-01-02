@@ -10,7 +10,7 @@ import type {
   ClientToServerEvents,
   ServerToClientEvents,
 } from "../../common/io";
-import { getOrCreatePlayer } from "./domain/player";
+import { findPlayer, getOrCreatePlayer } from "./domain/player";
 import { allowedOrigins, server } from "./server";
 
 export const io = new Server<
@@ -27,6 +27,10 @@ export const io = new Server<
 
 io.on("connection", (socket) => {
   const userId = socket.handshake.auth.id as string;
+
+  if (!findPlayer(userId)) {
+    socket.emit("connection-reset");
+  }
 
   const player = getOrCreatePlayer(socket, userId);
   socket.data = { player };

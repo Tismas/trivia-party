@@ -3,7 +3,6 @@ import type {
   ClientToServerEvents,
   ServerToClientEvents,
 } from "../../common/io";
-import { debounce } from "../../common/utils/func";
 import { config } from "./config";
 import { handleGameEvents } from "./events/gameEvents";
 import { handlePlayerEvents } from "./events/playerEvents";
@@ -31,15 +30,3 @@ export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
 handleGameEvents(socket);
 handlePlayerEvents(socket);
 handleRoomEvents(socket);
-
-const onFocus = debounce(() => {
-  socket.emit("am-i-alive", id);
-}, 1000);
-
-window.addEventListener("focus", onFocus);
-window.addEventListener("pageshow", onFocus);
-document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState === "visible") {
-    onFocus();
-  }
-});

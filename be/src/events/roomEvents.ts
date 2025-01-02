@@ -1,4 +1,3 @@
-import { findPlayer } from "../domain/player";
 import { findRoom, Room } from "../domain/room";
 import type { TypedServerSocket } from "./socket";
 
@@ -16,12 +15,6 @@ export const handleRoomEvents = (socket: TypedServerSocket) => {
     }
 
     socket.data.player.joinRoom(room);
-  });
-
-  socket.on("am-i-alive", (playerId: string) => {
-    if (!findPlayer(playerId)) {
-      socket.emit("connection-reset");
-    }
   });
 
   socket.on("leave-room", () => {
