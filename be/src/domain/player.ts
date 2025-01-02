@@ -86,7 +86,7 @@ const clearDisconnectedPlayer = () => {
 
     const timeSinceDisconnect =
       Number(new Date()) - Number(player.disconnectedAt);
-    if (timeSinceDisconnect < playerTimeoutAfterDisconnect * 1000) {
+    if (timeSinceDisconnect > playerTimeoutAfterDisconnect * 1000) {
       if (player.room) {
         player.room.leave(player);
       }
@@ -96,4 +96,4 @@ const clearDisconnectedPlayer = () => {
   });
 };
 
-setInterval(clearDisconnectedPlayer, 60 * 1000);
+setInterval(clearDisconnectedPlayer, 30 * 1000);

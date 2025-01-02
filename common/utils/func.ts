@@ -6,7 +6,7 @@ export const debounce = <Args extends Array<any>>(
 
   const debounced = (...args: Args) => {
     if (timeoutId) clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => fn(...args), timeout) as number;
+    timeoutId = setTimeout(() => fn(...args), timeout) as unknown as number;
   };
 
   return debounced;
