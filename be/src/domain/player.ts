@@ -2,6 +2,8 @@ import { randomUUID } from "crypto";
 import type { Room } from "./room";
 import { TypedServerSocket } from "../events/socket";
 
+const playerTimeoutAfterDisconnect = 1; // in minutes
+
 export class Player {
   socket: TypedServerSocket;
   id: string;
@@ -74,13 +76,17 @@ export const getOrCreatePlayer = (
   return new Player(socket, userId);
 };
 
+export const findPlayer = (playerId: string): Player | undefined => {
+  return players[playerId];
+};
+
 const clearDisconnectedPlayer = () => {
   Object.values(players).forEach((player) => {
     if (!player.disconnectedAt) return;
 
     const timeSinceDisconnect =
       Number(new Date()) - Number(player.disconnectedAt);
-    if (timeSinceDisconnect < 5 * 60 * 1000) {
+    if (timeSinceDisconnect < playerTimeoutAfterDisconnect * 60 * 1000) {
       if (player.room) {
         player.room.leave(player);
       }

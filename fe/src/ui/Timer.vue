@@ -1,17 +1,20 @@
 <script setup lang="ts">
 import { differenceInMilliseconds } from "date-fns";
 import { computed, ref } from "vue";
-const props = defineProps<{ until: Date; stopped?: boolean }>();
+const props = defineProps<{
+  startedAt: Date;
+  endsAt: Date;
+  stopped?: boolean;
+}>();
 
 const getTimeLeft = () => {
-  const left = differenceInMilliseconds(props.until, new Date());
+  const left = differenceInMilliseconds(props.endsAt, new Date());
   if (left < 0) return 0;
   return left;
 };
 
 const timeLeft = ref(getTimeLeft());
-const startedAt = new Date();
-const totalDuration = Number(props.until) - Number(startedAt);
+const totalDuration = Number(props.endsAt) - Number(props.startedAt);
 
 const percentage = computed(() =>
   Math.round((timeLeft.value / totalDuration) * 100)

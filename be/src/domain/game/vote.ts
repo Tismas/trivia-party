@@ -71,6 +71,7 @@ export class Vote {
   emitVoteStart(socket: TypedServerSocket | TypedRoomSocket) {
     socket.emit(
       "vote-started",
+      this.startedAt.toISOString(),
       this.endsAt.toISOString(),
       this.type,
       this.question,

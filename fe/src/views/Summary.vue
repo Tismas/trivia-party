@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { socket } from "../io";
+import { router } from "../router";
 import { usePlayerStore } from "../store/playerStore";
 import Button from "../ui/Button.vue";
 import CrownIcon from "../ui/icons/CrownIcon.vue";
@@ -15,7 +16,7 @@ const handleLeaveRoom = () => {
 };
 
 const handleBackToLobby = () => {
-  socket.emit("back-to-lobby");
+  router.push("/lobby");
 };
 </script>
 

@@ -30,3 +30,10 @@ export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
 handleGameEvents(socket);
 handlePlayerEvents(socket);
 handleRoomEvents(socket);
+
+const onFocus = () => {
+  socket.emit("am-i-alive", id);
+};
+
+window.addEventListener("focus", onFocus);
+window.addEventListener("pageshow", onFocus);

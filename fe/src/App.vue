@@ -22,7 +22,7 @@ import { RouterView } from "vue-router";
 }
 
 html {
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .container {

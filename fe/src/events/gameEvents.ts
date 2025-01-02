@@ -8,9 +8,10 @@ export const handleGameEvents = (socket: TypedSocket) => {
   });
   socket.on(
     "vote-started",
-    (endsAt, type, question, answers, category, index, total) => {
+    (startedAt, endsAt, type, question, answers, category, index, total) => {
       const playerStore = usePlayerStore();
       playerStore.startVote(
+        new Date(startedAt),
         new Date(endsAt),
         type,
         question,

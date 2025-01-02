@@ -9,9 +9,10 @@ interface VoteAnswers {
   winner: number;
 }
 
-interface Vote {
+export interface Vote {
   type: "question" | "category";
   question: string;
+  startedAt: Date;
   endsAt: Date;
   options: AnswerDto[];
   results: VoteAnswers | null;
@@ -88,6 +89,7 @@ export const usePlayerStore = defineStore("player", () => {
   };
 
   const startVote = (
+    startedAt: Date,
     endsAt: Date,
     type: Vote["type"],
     question: string,
@@ -102,6 +104,7 @@ export const usePlayerStore = defineStore("player", () => {
     currentVote.value = {
       type,
       question,
+      startedAt,
       endsAt,
       options: answers,
       results: null,

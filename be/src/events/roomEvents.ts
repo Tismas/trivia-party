@@ -1,3 +1,4 @@
+import { findPlayer } from "../domain/player";
 import { findRoom, Room } from "../domain/room";
 import type { TypedServerSocket } from "./socket";
 
@@ -17,14 +18,13 @@ export const handleRoomEvents = (socket: TypedServerSocket) => {
     socket.data.player.joinRoom(room);
   });
 
-  socket.on("leave-room", () => {
-    socket.data.player.leaveRoom();
+  socket.on("am-i-alive", (playerId: string) => {
+    if (!findPlayer(playerId)) {
+      socket.emit("connection-reset");
+    }
   });
 
-  socket.on("back-to-lobby", () => {
-    const room = socket.data.player.room;
-    if (!room) return;
-
-    room.socket.emit("back-to-lobby");
+  socket.on("leave-room", () => {
+    socket.data.player.leaveRoom();
   });
 };

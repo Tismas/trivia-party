@@ -39,7 +39,7 @@ export const handleRoomEvents = (socket: TypedSocket) => {
     playerStore.reset();
   });
 
-  socket.on("back-to-lobby", () => {
-    router.push("/lobby");
+  socket.on("connection-reset", () => {
+    router.push("/home");
   });
 };

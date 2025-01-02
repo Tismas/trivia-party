@@ -9,7 +9,7 @@ export type ClientRoomEventHandlers = {
   "game-started": () => void;
   "invalid-game": () => void;
   "game-finished": (players: Player[]) => void;
-  "back-to-lobby": () => void;
+  "connection-reset": () => void;
 };
 
 export type ClientPlayerEventHandlers = {
@@ -21,6 +21,7 @@ export type ClientGameEventHandlers = {
   "vote-finished": (votes: VotesDto, winner: number) => void;
   "loading-questions": () => void;
   "vote-started": (
+    startedAt: string,
     endsAt: string,
     type: VoteType,
     question: string,

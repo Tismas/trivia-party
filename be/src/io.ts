@@ -48,13 +48,6 @@ io.on("connection", (socket) => {
         socket.emit("game-started");
         game.currentVote.emitVoteStart(socket);
       }
-
-      // const game = player.currentRoom.game;
-      // if (game.categoriesVoteEnd) {
-      //   socket.emit("question-vote-started", )
-      // } else {
-      //   socket.emit("category-vote-started", )
-      // }
     }
   }
 

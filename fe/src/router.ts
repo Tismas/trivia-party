@@ -3,7 +3,7 @@ import { createRouter, createMemoryHistory } from "vue-router";
 import HomeView from "./views/Home.vue";
 import MenuView from "./views/Menu.vue";
 import LobbyView from "./views/Lobby.vue";
-import GameView from "./views/Game.vue";
+import GameView from "./views/Game/Game.vue";
 import JoinView from "./views/Join.vue";
 import SummaryView from "./views/Summary.vue";
 
