@@ -21,6 +21,11 @@ export interface Vote {
   total: number;
 }
 
+interface ScoreBoardEntry {
+  player: Player;
+  place: number;
+}
+
 export const usePlayerStore = defineStore("player", () => {
   const name = ref("");
   const joiningRoom = ref(false);
@@ -29,7 +34,7 @@ export const usePlayerStore = defineStore("player", () => {
   const currentVote = ref<Vote | null>(null);
   const currentRoom = ref<Room | null>(null);
   const chosenAnswer = ref<number | null>(null);
-  const finalScores = ref<Player[] | null>(null);
+  const finalScores = ref<ScoreBoardEntry[] | null>(null);
   const joinError = ref<string | null>(null);
 
   const setName = (newName: string) => {
@@ -140,7 +145,13 @@ export const usePlayerStore = defineStore("player", () => {
   };
 
   const finishGame = (players: Player[]) => {
-    finalScores.value = players.sort((p1, p2) => p2.points - p1.points);
+    const scores = [...new Set(players.map((p) => p.points))].sort(
+      (a, b) => b - a
+    );
+
+    finalScores.value = players
+      .sort((p1, p2) => p2.points - p1.points)
+      .map((player) => ({ player, place: scores.indexOf(player.points) }));
     router.push("/summary");
   };
 

@@ -21,17 +21,20 @@ const handleBackToLobby = () => {
 </script>
 
 <template>
-  <div class="scores">
-    <div class="score" v-for="(player, index) in playerStore.finalScores">
+  <div class="wrapper">
+    <div class="scores">
       <div
-        v-if="index < 3"
-        class="crown"
-        :class="{ first: index === 0, second: index === 1, third: index === 2 }"
+        class="score"
+        v-for="{ player, place } in playerStore.finalScores"
+        :class="{ first: place === 0, second: place === 1, third: place === 2 }"
       >
-        <CrownIcon />
+        <div v-if="place < 3" class="crown">
+          <CrownIcon />
+        </div>
+        <div v-else></div>
+        <div class="player-name">{{ player.name }}</div>
+        <div class="points">{{ player.points }}</div>
       </div>
-      <div class="player-name">{{ player.name }}</div>
-      <div class="points">{{ player.points }}</div>
     </div>
     <div class="actions">
       <Button @click="handleBackToLobby()">Back to lobby</Button>
@@ -42,24 +45,66 @@ const handleBackToLobby = () => {
 </template>
 
 <style scoped>
-.score {
+.wrapper {
   display: flex;
   flex-direction: column;
   text-align: center;
-  margin-bottom: 32px;
+  width: 100%;
+  padding: 20px;
 }
-.player-name {
-  font-size: 1.4rem;
+.scores {
+  margin-bottom: 64px;
 }
-.crown.first {
+.score {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+.score.first {
+  margin-bottom: 16px;
+}
+.score.second {
+  margin-bottom: 12px;
+}
+.score.third {
+  margin-bottom: 8px;
+}
+.score.first > .crown {
   color: #facc15;
 }
-.crown.second {
+.score.first > .player-name {
+  font-size: 2rem;
+}
+.score.first > .points {
+  font-size: 2rem;
+}
+
+.score.second > .crown {
   color: #9ca3af;
 }
-.crown.third {
+
+.score.second > .player-name {
+  font-size: 1.7rem;
+}
+.score.second > .points {
+  font-size: 1.7rem;
+}
+
+.score.third > .crown {
   color: #78350f;
 }
+.score.third > .player-name {
+  font-size: 1.3rem;
+}
+.score.third > .points {
+  font-size: 1.3rem;
+}
+
+.player-name {
+  font-size: 1rem;
+}
+
 .actions {
   display: flex;
   flex-direction: column;
